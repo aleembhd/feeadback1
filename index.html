@@ -969,12 +969,17 @@
             authDomain: "feedbackapp-5904d.firebaseapp.com",
             databaseURL: "https://feedbackapp-5904d-default-rtdb.firebaseio.com",
             projectId: "feedbackapp-5904d",
-            storageBucket: "feedbackapp-5904d.firebasestorage.app",
+            storageBucket: "feedbackapp-5904d.applestorage.app",
             messagingSenderId: "620175464767",
             appId: "1:620175464767:web:8054286a27a26210619b8a",
             measurementId: "G-QH8JN7TE0J"
         };
-        firebase.initializeApp(firebaseConfig);
+
+        // Initialize Firebase with custom domain
+        const app = firebase.initializeApp({
+            ...firebaseConfig,
+            authDomain: "feeadback1.netlify.app"  // Add your Netlify domain here
+        });
 
         // Add this flag to prevent loops
         const redirected = sessionStorage.getItem('redirected');
