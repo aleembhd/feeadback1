@@ -994,7 +994,7 @@
             .catch(error => console.error('Error pre-fetching names:', error));
 
         // Add this after Firebase initialization
-        const excludedButtons = [0,2,3,4,5,6,7,8,9,10]; // Global excludedButtons array
+        const excludedButtons = [1,2,3,4,5,6,7,8,9,10]; // Global excludedButtons array
 
         // Add this right after your Firebase initialization
         let hamburgerPressTimer;
@@ -1127,7 +1127,7 @@
             let currentRole = '';
 
             telecallerBtn.addEventListener('click', function() {
-                const excludedButtons = [0,2,3,4,5,6,7,8,9,10]; // Add any numbers you want to exclude here, e.g., [7, 3, 5]
+                const excludedButtons = [1,2,3,4,5,6,7,8,9,10]; // Add any numbers you want to exclude here, e.g., [7, 3, 5]
                 const telecallerModal = document.createElement('div');
                 telecallerModal.className = 'modal';
                 telecallerModal.style.display = 'block';
@@ -1475,7 +1475,7 @@
                     managerModal.style.display = 'block';
                     
                     // Define buttons to exclude
-                    const excludedButtons = [0,2,3,4,5,6,7,8,9,10];
+                    const excludedButtons = [1,2,3,4,5,6,7,8,9,10];
                     
                     // Filter out excluded buttons when creating the HTML
                     const buttonsHtml = Array.from({ length: 11 }, (_, i) => {
@@ -1595,7 +1595,7 @@
                 telecallerModal.className = 'modal';
                 telecallerModal.style.display = 'block';
                 
-                const excludedButtons = [0,2,3,4,5,6,7,8,9,10]; // Button numbers to exclude
+                const excludedButtons = [1,2,3,4,5,6,7,8,9,10]; // Button numbers to exclude
                 
                 // Use cached names or empty object if cache not ready
                 const names = cachedNames || {};
@@ -2098,8 +2098,8 @@
 
             // Back button functionality
             createAdminModal.querySelector('.back-btn').addEventListener('click', function() {
-                createAdminModal.style.display = 'none';
-                passwordModal.style.display = 'block';
+                document.getElementById('createAdminModal').style.display = 'none';
+                document.getElementById('passwordModal').style.display = 'block';
             });
 
             // Create account functionality
@@ -2202,9 +2202,8 @@
 
         // Fix for Create Admin Account back button
         document.querySelector('#createAdminModal .back-btn').addEventListener('click', function() {
-            createAdminModal.style.display = 'none';
-            passwordModal.style.display = 'block';
-            document.getElementById('newAdminPassword').value = '';
+            document.getElementById('createAdminModal').style.display = 'none';
+            document.getElementById('passwordModal').style.display = 'block';
         });
 
         // Find these existing event listeners and modify them
