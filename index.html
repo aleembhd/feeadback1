@@ -2381,7 +2381,7 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             
             provider.setCustomParameters({
-                prompt: 'login',
+                prompt: 'select_account',  // Changed from 'login' to 'select_account'
                 login_hint: email
             });
             
@@ -2390,8 +2390,8 @@
             submitBtn.textContent = 'Waiting for authentication...';
             
             return new Promise((resolve, reject) => {
-                passwordChangeAuth
-                    .auth()
+                // Use the main Firebase instance instead of passwordChangeAuth
+                firebase.auth()
                     .signInWithPopup(provider)
                     .then((result) => {
                         if (result.user.email === email) {
@@ -2404,7 +2404,7 @@
                     .finally(() => {
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Save Changes';
-                        passwordChangeAuth.auth().signOut();
+                        // No need to sign out here as we want to maintain the session
                     });
             });
         }
