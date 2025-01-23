@@ -1812,6 +1812,12 @@
                         });
                 });
             });
+
+            // Back button functionality for password change modal
+            document.querySelector('#createAdminModal .back-btn').addEventListener('click', function() {
+                document.getElementById('createAdminModal').style.display = 'none';
+                document.getElementById('passwordModal').style.display = 'block';
+            });
         });
 
         // After successful login
