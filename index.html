@@ -871,21 +871,6 @@
             <div class="separator"></div>
             <a href="help.html">Help</a>
         </div>
-        
-        <div class="user-profile">
-            <img id="userProfilePic" class="profile-pic" src="" alt="Profile">
-            <div class="profile-dropdown" id="profileDropdown">
-                <div class="profile-info">
-                    <img id="dropdownProfilePic" src="" alt="Profile">
-                    <div class="user-details">
-                        <span id="userName"></span>
-                        <span id="userEmail"></span>
-                    </div>
-                </div>
-                <div class="dropdown-separator"></div>
-                <button id="signOutBtn" class="sign-out-btn">Sign Out</button>
-            </div>
-        </div>
     </div>
 
     <!-- Add this success message div -->
@@ -969,27 +954,19 @@
             authDomain: "feedbackapp-5904d.firebaseapp.com",
             databaseURL: "https://feedbackapp-5904d-default-rtdb.firebaseio.com",
             projectId: "feedbackapp-5904d",
-            storageBucket: "feedbackapp-5904d.applestorage.app",
+            storageBucket: "feedbackapp-5904d.firebasestorage.app",
             messagingSenderId: "620175464767",
             appId: "1:620175464767:web:8054286a27a26210619b8a",
             measurementId: "G-QH8JN7TE0J"
         };
-
-        // Initialize Firebase with custom domain
-        const app = firebase.initializeApp({
-            ...firebaseConfig,
-            authDomain: "feeadback1.netlify.app"  // Add your Netlify domain here
-        });
+        firebase.initializeApp(firebaseConfig);
 
         // Add this flag to prevent loops
         const redirected = sessionStorage.getItem('redirected');
         
+        // Remove the auth state change handler completely
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                window.location.replace('auth.html');
-            } else {
-                restoreGoogleProfile();
-            }
+            // No redirects or profile restoration
         });
 
         // Add this after Firebase initialization
