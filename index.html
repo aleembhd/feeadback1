@@ -948,7 +948,7 @@
     
 
     <script>
-        // Initialize Firebase
+        // Add this right after the first Firebase initialization
         const firebaseConfig = {
             apiKey: "AIzaSyCLrrkbXcW-exG8_n4kOEmzA-SETMWqo-0",
             authDomain: "feedbackapp-5904d.firebaseapp.com",
@@ -960,6 +960,19 @@
             measurementId: "G-QH8JN7TE0J"
         };
         firebase.initializeApp(firebaseConfig);
+
+        // Initialize second Firebase instance for password change
+        const passwordChangeConfig = {
+            apiKey: "AIzaSyADbdw5KtrmjQT_5EBJ6kNzExx8kkTEkuc",
+            authDomain: "realestate-694f3.firebaseapp.com",
+            databaseURL: "https://realestate-694f3-default-rtdb.firebaseio.com",
+            projectId: "realestate-694f3",
+            storageBucket: "realestate-694f3.appspot.com",
+            messagingSenderId: "966861149434",
+            appId: "1:966861149434:web:8a57876a91c80bcf216543",
+            measurementId: "G-J68SDN99DV"
+        };
+        const passwordChangeAuth = firebase.initializeApp(passwordChangeConfig, 'passwordChange');
 
         // Add this flag to prevent loops
         const redirected = sessionStorage.getItem('redirected');
@@ -2363,29 +2376,15 @@
                 });
         };
 
-        // Add this code right after Firebase initialization
-        const passwordChangeAuth = firebase.initializeApp({
-            // Your Firebase config here
-            apiKey: "AIzaSyADbdw5KtrmjQT_5EBJ6kNzExx8kkTEkuc",
-            authDomain: "realestate-694f3.firebaseapp.com",
-            databaseURL: "https://realestate-694f3-default-rtdb.firebaseio.com",
-            projectId: "realestate-694f3",
-            storageBucket: "realestate-694f3.appspot.com",
-            messagingSenderId: "966861149434",
-            appId: "1:966861149434:web:8a57876a91c80bcf216543",
-            measurementId: "G-J68SDN99DV"
-        }, 'passwordChange'); // Second instance for password change only
-
         // Update the authenticatePasswordChange function
         function authenticatePasswordChange(email) {
             const provider = new firebase.auth.GoogleAuthProvider();
             
             provider.setCustomParameters({
-                prompt: 'login',  // Forces sign-in page
+                prompt: 'login',
                 login_hint: email
             });
             
-            // Show loading state
             const submitBtn = document.getElementById('createAccountBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Waiting for authentication...';
@@ -2403,66 +2402,12 @@
                     })
                     .catch(reject)
                     .finally(() => {
-                        // Reset button state
                         submitBtn.disabled = false;
                         submitBtn.textContent = 'Save Changes';
-                        // Sign out from the password change instance
                         passwordChangeAuth.auth().signOut();
                     });
             });
         }
-
-        // Update the createAccountBtn click handler
-        document.getElementById('createAccountBtn').onclick = function(e) {
-            e.preventDefault();
-            const email = document.getElementById('newAdminEmail').value;
-            const password = document.getElementById('newAdminPassword').value;
-
-            if (!email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // First authenticate with Google
-            authenticatePasswordChange(email)
-                .then(() => {
-                    // After successful authentication, save the password
-                    const allNumbers = Array.from({length: 11}, (_, i) => i);
-                    const missingNumbers = allNumbers.filter(num => !excludedButtons.includes(num));
-                    const adminKey = `admin${missingNumbers.join('-')}password`;
-
-                    return firebase.database().ref('adminCredentials').child(adminKey).set({
-                        email: email,
-                        password: password
-                    });
-                })
-                .then(() => {
-                    // Show success message immediately after Firebase save
-                    const successMessage = document.getElementById('successMessage');
-                    successMessage.textContent = 'Password changed successfully!';
-                    successMessage.classList.add('show');
-                    
-                    // Close modals and clear form
-                    document.getElementById('createAdminModal').style.display = 'none';
-                    document.getElementById('passwordModal').style.display = 'block';
-                    document.getElementById('newAdminPassword').value = '';
-                    
-                    // Remove success message after 1.5 seconds
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 1500);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    if (error.code === 'auth/popup-blocked') {
-                        alert('Please allow popups for this site to authenticate');
-                    } else if (error.code === 'auth/cancelled-popup-request') {
-                        // User closed the popup, no need to show error
-                    } else {
-                        alert(error.message || 'Authentication failed. Please try again.');
-                    }
-                });
-        };
 
         // Add success message styles if not already present
         const successMessageStyles = `
